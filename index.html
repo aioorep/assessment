@@ -14,8 +14,8 @@
     --cyan-border:rgba(92,225,230,0.25);
     --grey:       #464646;
     --deep-black: #0B0F14;
-    --purple:     #6F1AED;
-    --purple-bg:  rgba(111,26,237,0.1);
+    --purple:     #FF6F00;
+    --purple-bg:  rgba(255,111,0,0.1);
     --orange:     #FF6F00;
     --orange-bg:  rgba(255,111,0,0.1);
     --white:      #FFFFFF;
@@ -28,8 +28,8 @@
     --go-bg:      rgba(92,225,230,0.08);
     --nogo:       #FF6F00;
     --nogo-bg:    rgba(255,111,0,0.08);
-    --warn:       #6F1AED;
-    --warn-bg:    rgba(111,26,237,0.1);
+    --warn:       #FF6F00;
+    --warn-bg:    rgba(255,111,0,0.1);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,18 +42,7 @@
     overflow-x: hidden;
   }
 
-  /* Background grid effect */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(92,225,230,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(92,225,230,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
+  /* Background clean */
 
   /* ── HEADER ───────────────────────────────────── */
   .header {
@@ -131,7 +120,7 @@
 
   .save-btn:hover { background: #7aeaee; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(92,225,230,0.3); }
   .save-btn:active { transform: translateY(0); }
-  .save-btn.saving { background: var(--purple); color: white; }
+  .save-btn.saving { background: var(--orange); color: white; }
   .save-btn.saved  { background: #22c55e; color: white; }
 
   /* ── PROGRESS ─────────────────────────────────── */
@@ -161,7 +150,7 @@
   }
   .gate-pill.pass    { background: var(--cyan); box-shadow: 0 0 8px rgba(92,225,230,0.5); }
   .gate-pill.fail    { background: var(--orange); }
-  .gate-pill.partial { background: var(--purple); }
+  .gate-pill.partial { background: var(--orange); }
 
   .progress-label {
     font-size: 11px;
@@ -195,7 +184,7 @@
   .verdict-banner.show { display: flex; }
   .verdict-banner.go-banner   { background: var(--cyan-bg); border: 1px solid var(--cyan-border); }
   .verdict-banner.nogo-banner { background: var(--orange-bg); border: 1px solid rgba(255,111,0,0.3); }
-  .verdict-banner.warn-banner { background: var(--purple-bg); border: 1px solid rgba(111,26,237,0.3); }
+  .verdict-banner.warn-banner { background: var(--purple-bg); border: 1px solid rgba(255,111,0,0.3); }
 
   .verdict-icon { font-size: 26px; flex-shrink: 0; }
   .verdict-text { flex: 1; }
@@ -203,7 +192,7 @@
   .verdict-sub   { font-size: 12px; opacity: 0.7; margin-top: 2px; font-weight: 400; }
   .go-banner .verdict-title   { color: var(--cyan); }
   .nogo-banner .verdict-title { color: var(--orange); }
-  .warn-banner .verdict-title { color: #a855f7; }
+  .warn-banner .verdict-title { color: #FF6F00; }
 
   /* ── GATE CARD ────────────────────────────────── */
   .gate-card {
@@ -691,7 +680,7 @@ const GATES = [
     id: 2,
     title: 'Gate 2 — Network Scale',
     subtitle: "Confirm the retailer's network is large enough to justify pilot investment.",
-    color: '#6F1AED',
+    color: '#5CE1E6',
     badgeClass: 'badge-standard',
     badge: 'STANDARD',
     critical: false,
