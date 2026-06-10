@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AiOO — Discovery Qualification Scorecard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #F3F5F8;
+    --white:     #FFFFFF;
+    --border:    #E4E8EF;
+    --text:      #0F1923;
+    --text-2:    #3D4A5C;
+    --muted:     #8A95A3;
+    --cyan:      #1AC8CE;
+    --cyan-bg:   rgba(26,200,206,0.08);
+    --cyan-dark: #0fa8ad;
+    --orange:    #FF6B35;
+    --orange-bg: rgba(255,107,53,0.08);
+    --green:     #22C55E;
+    --green-bg:  rgba(34,197,94,0.08);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    --radius:    12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  .header {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-left { display: flex; align-items: center; gap: 20px; }
+  .logo img { height: 30px; width: auto; display: block; }
+  .logo-fallback {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -1px;
+  }
+  .logo-fallback span { color: var(--cyan); }
+  .header-divider { width: 1px; height: 22px; background: var(--border); }
+  .header-subtitle { font-size: 13px; font-weight: 500; color: var(--muted); }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .confidential-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+  }
+  .save-btn {
+    background: var(--cyan);
+    color: white;
+    border: none;
+    padding: 9px 20px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  }
+  .save-btn:hover { background: var(--cyan-dark); box-shadow: 0 4px 14px rgba(26,200,206,0.3); transform: translateY(-1px); }
+  .save-btn.saving { background: var(--muted); }
+  .save-btn.saved  { background: var(--green); }
+
+  /* ── HERO ───────────────────────────────────── */
+  .hero {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 40px 40px;
+  }
+  .hero-inner { max-width: 820px; margin: 0 auto; }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-size: 38px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .hero-title .accent { color: var(--cyan); }
+  .hero-desc {
+    font-size: 15px;
+    color: var(--text-2);
+    font-weight: 400;
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  .deal-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .deal-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+  .deal-pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    flex-shrink: 0;
+  }
+
+  /* ── PROGRESS STRIP ─────────────────────────── */
+  .progress-strip {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .progress-gates { display: flex; gap: 4px; flex: 1; }
+  .gate-pill {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+  .gate-pill.pass    { background: var(--cyan); }
+  .gate-pill.fail    { background: var(--orange); }
+  .gate-pill.partial { background: #FBB040; }
+  .progress-info {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── MAIN ───────────────────────────────────── */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 100px;
+  }
+
+  /* ── VERDICT ────────────────────────────────── */
+  .verdict-banner {
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    display: none;
+    align-items: center;
+    gap: 14px;
+    animation: fadeSlide 0.25s ease;
+  }
+  @keyframes fadeSlide { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+  .verdict-banner.show { display: flex; }
+  .verdict-banner.go-banner   { background: rgba(26,200,206,0.08); border: 1px solid rgba(26,200,206,0.25); }
+  .verdict-banner.nogo-banner { background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.25); }
+  .verdict-banner.warn-banner { background: rgba(251,176,64,0.1);  border: 1px solid rgba(251,176,64,0.3); }
+  .verdict-icon { font-size: 22px; flex-shrink: 0; }
+  .verdict-text .verdict-title { font-size: 14px; font-weight: 700; }
+  .verdict-text .verdict-sub   { font-size: 12px; opacity: 0.65; margin-top: 2px; }
+  .go-banner .verdict-title   { color: var(--cyan-dark); }
+  .nogo-banner .verdict-title { color: var(--orange); }
+  .warn-banner .verdict-title { color: #D97706; }
+
+  /* ── GATE CARD ──────────────────────────────── */
+  .gate-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .gate-card.gate-pass { border-color: rgba(26,200,206,0.5); box-shadow: 0 0 0 1px rgba(26,200,206,0.12), var(--shadow-sm); }
+  .gate-card.gate-fail { border-color: rgba(255,107,53,0.5);  box-shadow: 0 0 0 1px rgba(255,107,53,0.08), var(--shadow-sm); }
+
+  .gate-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .gate-letter {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    flex-shrink: 0;
+    color: white;
+  }
+  .gate-info { flex: 1; min-width: 0; }
+  .gate-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .gate-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 400;
+    margin-top: 1px;
+    line-height: 1.4;
+  }
+  .gate-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .gate-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    min-width: 42px;
+    text-align: center;
+  }
+  .gate-badge-binary {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: var(--orange-bg);
+    border: 1px solid rgba(255,107,53,0.25);
+    border-radius: 20px;
+    padding: 3px 9px;
+  }
+
+  /* ── QUESTION ROWS ──────────────────────────── */
+  .question-row {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: start;
+    transition: background 0.12s;
+  }
+  .question-row:last-child { border-bottom: none; }
+  .question-row:hover { background: #FAFBFC; }
+
+  .q-left { display: flex; flex-direction: column; gap: 10px; }
+  .q-num-text { display: flex; gap: 10px; align-items: flex-start; }
+  .q-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan);
+    flex-shrink: 0;
+    min-width: 20px;
+    margin-top: 1px;
+  }
+  .q-text {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .q-signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-left: 30px;
+  }
+  .signal {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 5px;
+    line-height: 1.4;
+  }
+  .signal-go   { background: rgba(26,200,206,0.07); color: #0a8f94; border: 1px solid rgba(26,200,206,0.2); }
+  .signal-nogo { background: rgba(255,107,53,0.07); color: #c84b1e; border: 1px solid rgba(255,107,53,0.2); }
+  .q-note {
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    padding-left: 30px;
+    font-style: italic;
+  }
+
+  /* ── TOGGLE CONTROLS ────────────────────────── */
+  .q-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+  .toggle-group { display: flex; gap: 6px; }
+  .toggle-btn {
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-2);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .toggle-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .toggle-btn.go-active {
+    background: rgba(26,200,206,0.1);
+    border-color: var(--cyan);
+    color: var(--cyan-dark);
+    box-shadow: 0 0 0 2px rgba(26,200,206,0.15);
+  }
+  .toggle-btn.nogo-active {
+    background: rgba(255,107,53,0.1);
+    border-color: var(--orange);
+    color: var(--orange);
+    box-shadow: 0 0 0 2px rgba(255,107,53,0.12);
+  }
+  .notes-input {
+    width: 200px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 11px;
+    font-family: inherit;
+    font-size: 11.5px;
+    color: var(--text);
+    resize: none;
+    height: 32px;
+    transition: border-color 0.2s, height 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+  .notes-input::placeholder { color: var(--muted); }
+  .notes-input:focus {
+    outline: none;
+    border-color: var(--cyan);
+    background: var(--white);
+    height: 58px;
+    overflow: auto;
+  }
+
+  /* ── SUMMARY ────────────────────────────────── */
+  .summary-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 28px;
+    box-shadow: var(--shadow-sm);
+  }
+  .summary-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .sg-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+    transition: all 0.25s;
+    background: var(--bg);
+  }
+  .sg-item.pass { background: rgba(26,200,206,0.07); border-color: rgba(26,200,206,0.35); }
+  .sg-item.fail { background: rgba(255,107,53,0.07); border-color: rgba(255,107,53,0.35); }
+  .sg-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+  }
+  .sg-item.pass .sg-num { color: var(--cyan); }
+  .sg-item.fail .sg-num { color: var(--orange); }
+  .sg-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--muted);
+    margin-top: 5px;
+    line-height: 1.3;
+  }
+  .last-saved {
+    font-size: 11.5px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  /* ── TOAST ──────────────────────────────────── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--text);
+    color: white;
+    border-radius: var(--radius-sm);
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(60px);
+    opacity: 0;
+    transition: all 0.25s ease;
+    z-index: 999;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: #0F1923; }
+  .toast.error   { background: var(--orange); }
+
+  /* ── LOADING ────────────────────────────────── */
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    gap: 16px;
+    transition: opacity 0.3s;
+  }
+  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+  .spinner {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--border);
+    border-top-color: var(--cyan);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.5px; }
+
+  /* ── RESPONSIVE ─────────────────────────────── */
+  @media (max-width: 640px) {
+    .header { padding: 0 16px; }
+    .hero   { padding: 32px 16px 28px; }
+    .hero-title { font-size: 26px; }
+    .progress-strip { padding: 12px 16px; }
+    .main   { padding: 24px 14px 80px; }
+    .gate-header { padding: 14px 16px; }
+    .question-row { grid-template-columns: 1fr; gap: 14px; padding: 16px; }
+    .q-right { align-items: flex-start; }
+    .notes-input { width: 100%; }
+    .summary-grid { grid-template-columns: repeat(3, 1fr); }
+    .gate-sub { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <img src="logoaioo.png" alt="AiOO" style="height:34px;width:auto;" onerror="this.style.display='none';document.getElementById('loadingLogo').style.display='block'">
+  <div id="loadingLogo" style="display:none;font-size:24px;font-weight:800;color:#0F1923;letter-spacing:-1px;">Ai<span style="color:#1AC8CE;">OO</span></div>
+  <div class="spinner"></div>
+  <div class="loading-text">Loading scorecard…</div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">
+      <img src="logoaioo.png" alt="AiOO" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
+      <div id="logoFallback" class="logo-fallback" style="display:none;">Ai<span>OO</span></div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-subtitle">Discovery Scorecard</div>
+  </div>
+  <div class="header-right">
+    <div class="confidential-badge">Confidential</div>
+    <button class="save-btn" id="saveBtn" onclick="saveData()">
+      <span id="saveBtnIcon">↑</span>
+      <span id="saveBtnText">Save</span>
+    </button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">SALES · DISCOVERY</div>
+    <h1 class="hero-title">Discovery Qualification <span class="accent">Scorecard</span></h1>
+    <p class="hero-desc">Complete this scorecard during or after a discovery call. Each gate must be evaluated before advancing the deal. Critical gates require a full pass — a single NO-GO stops the deal.</p>
+    <div class="deal-pills">
+      <div class="deal-pill"><span class="dot"></span> Deal #<span id="dealTagNum">—</span></div>
+      <div class="deal-pill" id="dealTitlePill">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS STRIP -->
+<div class="progress-strip">
+  <div class="progress-gates">
+    <div class="gate-pill" id="pill0"></div>
+    <div class="gate-pill" id="pill1"></div>
+    <div class="gate-pill" id="pill2"></div>
+    <div class="gate-pill" id="pill3"></div>
+    <div class="gate-pill" id="pill4"></div>
+  </div>
+  <div class="progress-info" id="progressLabel">0 / 5 gates evaluated</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- VERDICT -->
+  <div class="verdict-banner" id="verdictBanner">
+    <div class="verdict-icon" id="verdictIcon"></div>
+    <div class="verdict-text">
+      <div class="verdict-title" id="verdictTitle"></div>
+      <div class="verdict-sub"   id="verdictSub"></div>
+    </div>
+  </div>
+
+  <!-- GATES -->
+  <div id="gatesContainer"></div>
+
+  <!-- SUMMARY -->
+  <div class="summary-card">
+    <div class="summary-eyebrow">Gates Summary</div>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div class="last-saved" id="lastSaved"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toastIcon">✓</span>
+  <span id="toastMsg">Saved successfully</span>
+</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7j8pQiEB128LJiS-iCcaJgpOjMvxGirmC8PVDa5Vm1lBKyJ6sPw_2qJB1X9s1QQ4B/exec';
+
+// ─── GATE COLORS ─────────────────────────────────────────────────────────────
+const GATE_COLORS = ['#FF6B35', '#1AC8CE', '#6366F1', '#1AC8CE', '#FF6B35'];
+const GATE_LETTERS = ['0', 'A', 'B', 'C', 'D'];
+
+// ─── GATE DATA ────────────────────────────────────────────────────────────────
+const GATES = [
+  {
+    id: 0,
+    name: 'Infrastructure Control',
+    sub: 'Binary pre-qualifier — if failed, stop immediately. Do not continue Discovery.',
+    critical: true,
+    questions: [
+      {
+        id: 'g0q1',
+        text: 'Does the prospect own or directly operate their in-store screens?',
+        go: 'Retailer owns screens and controls installation rights',
+        nogo: 'Screens owned or managed by a third-party network',
+        note: "If unclear, ask: 'Who manages your in-store screen infrastructure?'"
+      },
+      {
+        id: 'g0q2',
+        text: 'Can AiOO obtain installation rights for IoT hardware at store level?',
+        go: 'Retailer can grant site access and installation approval',
+        nogo: 'Third party controls access or blocks hardware installation',
+        note: 'Retail media networks without screen control are demand partners, not retailer prospects'
+      }
+    ]
+  },
+  {
+    id: 1,
+    name: 'Strategic Fit',
+    sub: 'Confirm the retailer operates in a category with strong FMCG advertiser demand.',
+    critical: true,
+    questions: [
+      {
+        id: 'g1q1',
+        text: 'What retail category does this prospect operate in?',
+        go: 'Grocery, pharmacy, home improvement, electronics, convenience',
+        nogo: 'B2B wholesale, luxury, niche specialty with no FMCG relevance',
+        note: "Category must attract FMCG brands already in AiOO's demand pipeline"
+      },
+      {
+        id: 'g1q2',
+        text: "Are major FMCG brands present and active in this retailer's stores?",
+        go: 'FMCG brands with large ad budgets actively sell through this retailer',
+        nogo: 'Limited or no FMCG brand presence in their category or geography',
+        note: "Cross-reference AiOO's active brand pipeline to confirm overlap"
+      },
+      {
+        id: 'g1q3',
+        text: 'Does the retailer operate in a geography where AiOO has or can secure brand demand?',
+        go: 'UAE, KSA, EU market with confirmed or pipeline brand demand',
+        nogo: 'Geography with no brand demand visibility and no near-term pipeline',
+        note: "Geography must align with AiOO's current or planned market activation"
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: 'Network Scale',
+    sub: "Confirm the retailer's network is large enough to justify pilot investment.",
+    critical: false,
+    questions: [
+      {
+        id: 'g2q1',
+        text: 'How many stores does the retailer operate in the target market?',
+        go: '10+ stores in a single market with screen deployment potential',
+        nogo: 'Fewer than 5 stores with no near-term expansion plan',
+        note: 'Pilot requires a single store — but total network must justify full deployment'
+      },
+      {
+        id: 'g2q2',
+        text: 'How many screens or screen locations exist or are planned per store?',
+        go: '5+ screens per store, or clear willingness to deploy at scale',
+        nogo: '1–2 screens per store with no appetite for expansion',
+        note: 'Minimum viable network for meaningful programmatic revenue is approx. 50+ screens total'
+      },
+      {
+        id: 'g2q3',
+        text: 'Is the store estate geographically concentrated enough for efficient deployment?',
+        go: 'Stores concentrated in one city or region — operationally efficient',
+        nogo: 'Highly dispersed estate with no concentration — high deployment cost',
+        note: 'Borderline cases escalate to Sales Lead — do not make unilateral Go decision'
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: 'Data Access Willingness',
+    sub: 'Confirm the retailer is open to the data integrations that power Pulse and Echo.',
+    critical: true,
+    questions: [
+      {
+        id: 'g3q1',
+        text: 'Is the retailer open in principle to sharing anonymised audience data from their stores?',
+        go: 'Open to anonymised audience measurement and data use for campaign targeting',
+        nogo: 'Firm refusal to allow any form of audience data collection on premises',
+        note: 'Required for AiOO Pulse. Frame as anonymised, aggregated, GDPR-compliant'
+      },
+      {
+        id: 'g3q2',
+        text: 'Is the retailer open to POS data integration for campaign attribution?',
+        go: 'Willing to explore transaction data integration for attribution reporting',
+        nogo: 'Firm refusal to share any POS or sales data under any conditions',
+        note: "Required for AiOO Echo. This is AiOO's core differentiator — non-negotiable"
+      },
+      {
+        id: 'g3q3',
+        text: 'Does the retailer have existing data governance constraints that could block integration?',
+        go: 'No blocking constraints, or constraints resolvable with standard DPA',
+        nogo: 'Hard contractual or regulatory blocks on third-party data access',
+        note: 'GDPR, local data law, or exclusive data agreements with competitors are hard blocks'
+      }
+    ]
+  },
+  {
+    id: 4,
+    name: 'Commercial Openness',
+    sub: 'Confirm genuine intent and decision-making authority before investing further resources.',
+    critical: false,
+    questions: [
+      {
+        id: 'g4q1',
+        text: 'Is the person you are speaking with a decision-maker or a direct influencer?',
+        go: 'C-suite, Commercial Director, or Head of Retail Media with budget authority',
+        nogo: 'Junior contact with no authority and no confirmed access to decision-maker',
+        note: "If not DM, ask: 'Who would need to be involved to move this forward?' Map the org."
+      },
+      {
+        id: 'g4q2',
+        text: 'Is the retailer genuinely exploring screen monetisation, or gathering market information?',
+        go: 'Active intent — they have a monetisation objective and a timeline',
+        nogo: 'Passive curiosity — benchmarking, no internal mandate or budget allocated',
+        note: "Ask: 'What would success look like for you in the next 12 months?' Listen for specifics."
+      },
+      {
+        id: 'g4q3',
+        text: 'Is the retailer open in principle to an exclusivity arrangement with AiOO?',
+        go: 'Open to exclusivity, or willing to discuss terms',
+        nogo: 'Hard refusal — existing exclusive agreement with a competitor already signed',
+        note: 'Exclusivity is a commercial negotiation point — openness to discuss is sufficient at this stage'
+      },
+      {
+        id: 'g4q4',
+        text: 'Does the retailer have any existing technology or partnerships that could conflict?',
+        go: 'No conflicting technology or partnerships in place',
+        nogo: 'Existing exclusive contract with a direct AiOO competitor covering same scope',
+        note: 'Partial overlap is manageable — only hard exclusive conflicts are a No-Go at Discovery'
+      }
+    ]
+  }
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let answers = {};
+let notes   = {};
+let dealId  = '';
+let dealTitle = '';
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+window.onload = async () => {
+  const params = new URLSearchParams(window.location.search);
+  dealId    = params.get('deal_id') || 'DEMO';
+  dealTitle = decodeURIComponent(params.get('prospect') || 'Demo Prospect');
+
+  document.getElementById('dealTagNum').textContent  = dealId;
+  document.getElementById('dealTitlePill').textContent = dealTitle;
+
+  renderGates();
+  renderSummary();
+
+  if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('VOTRE')) {
+    await loadData();
+  } else {
+    const saved = localStorage.getItem('scorecard_' + dealId);
+    if (saved) {
+      try {
+        const d = JSON.parse(saved);
+        answers = d.answers || {};
+        notes   = d.notes   || {};
+        applyAnswers();
+      } catch(e) {}
+    }
+  }
+
+  document.getElementById('loadingOverlay').classList.add('hidden');
+  updateAll();
+};
+
+// ─── RENDER GATES ─────────────────────────────────────────────────────────────
+function renderGates() {
+  const c = document.getElementById('gatesContainer');
+  c.innerHTML = '';
+
+  GATES.forEach((gate, i) => {
+    const color  = GATE_COLORS[i];
+    const letter = GATE_LETTERS[i];
+
+    const card = document.createElement('div');
+    card.className = 'gate-card';
+    card.id = 'gate-card-' + gate.id;
+
+    const binaryBadge = gate.critical && gate.id === 0
+      ? `<div class="gate-badge-binary">Binary</div>` : '';
+
+    card.innerHTML = `
+      <div class="gate-header">
+        <div class="gate-letter" style="background:${color}">${letter}</div>
+        <div class="gate-info">
+          <div class="gate-name">Gate ${gate.id} — ${gate.name}</div>
+          <div class="gate-sub">${gate.sub}</div>
+        </div>
+        <div class="gate-meta">
+          ${binaryBadge}
+          <div class="gate-count" id="gate-count-${gate.id}">0 / ${gate.questions.length}</div>
+        </div>
+      </div>
+      <div class="questions-list">
+        ${gate.questions.map((q, qi) => renderQuestion(q, qi + 1)).join('')}
+      </div>`;
+
+    c.appendChild(card);
+  });
+}
+
+function renderQuestion(q, num) {
+  return `
+    <div class="question-row" id="row-${q.id}">
+      <div class="q-left">
+        <div class="q-num-text">
+          <span class="q-num">${num}.</span>
+          <span class="q-text">${q.text}</span>
+        </div>
+        <div class="q-signals">
+          <span class="signal signal-go">✓ ${q.go}</span>
+          <span class="signal signal-nogo">✗ ${q.nogo}</span>
+        </div>
+        ${q.note ? `<div class="q-note">💡 ${q.note}</div>` : ''}
+      </div>
+      <div class="q-right">
+        <div class="toggle-group">
+          <button class="toggle-btn" id="go-${q.id}"   onclick="setAnswer('${q.id}','go')">✓ GO</button>
+          <button class="toggle-btn" id="nogo-${q.id}" onclick="setAnswer('${q.id}','nogo')">✗ NO-GO</button>
+        </div>
+        <textarea class="notes-input" id="notes-${q.id}" placeholder="Add notes…"
+          onchange="setNote('${q.id}', this.value)"
+          onfocus="this.style.height='58px'"
+          onblur="this.style.height='32px'"></textarea>
+      </div>
+    </div>`;
+}
+
+// ─── RENDER SUMMARY ───────────────────────────────────────────────────────────
+function renderSummary() {
+  const g = document.getElementById('summaryGrid');
+  g.innerHTML = GATES.map((gate, i) => `
+    <div class="sg-item" id="sg-${gate.id}">
+      <div class="sg-num">${GATE_LETTERS[i]}</div>
+      <div class="sg-label">${gate.name}</div>
+    </div>`).join('');
+}
+
+// ─── ANSWERS ──────────────────────────────────────────────────────────────────
+function setAnswer(qId, val) {
+  answers[qId] = answers[qId] === val ? null : val;
+  applyToggle(qId, answers[qId]);
+  updateAll();
+}
+
+function setNote(qId, val) { notes[qId] = val; }
+
+function applyToggle(qId, val) {
+  const goB   = document.getElementById('go-'   + qId);
+  const nogoB = document.getElementById('nogo-' + qId);
+  if (!goB || !nogoB) return;
+  goB.className   = val === 'go'   ? 'toggle-btn go-active'   : 'toggle-btn';
+  nogoB.className = val === 'nogo' ? 'toggle-btn nogo-active' : 'toggle-btn';
+}
+
+function applyAnswers() {
+  Object.entries(answers).forEach(([qId, val]) => { if (val) applyToggle(qId, val); });
+  Object.entries(notes).forEach(([qId, val]) => {
+    const f = document.getElementById('notes-' + qId);
+    if (f) f.value = val;
+  });
+}
+
+// ─── GATE STATUS ──────────────────────────────────────────────────────────────
+function gateStatus(gate) {
+  const ids      = gate.questions.map(q => q.id);
+  const answered = ids.filter(id => answers[id]);
+  if (!answered.length)                    return 'unanswered';
+  if (ids.some(id => answers[id] === 'nogo')) return 'fail';
+  if (answered.length === ids.length)      return 'pass';
+  return 'partial';
+}
+
+// ─── UPDATE ALL ───────────────────────────────────────────────────────────────
+function updateAll() {
+  let completed = 0;
+  GATES.forEach((gate, i) => {
+    const s    = gateStatus(gate);
+    const pill = document.getElementById('pill' + i);
+    const card = document.getElementById('gate-card-' + gate.id);
+    const sg   = document.getElementById('sg-' + gate.id);
+    const cnt  = document.getElementById('gate-count-' + gate.id);
+
+    // progress pill
+    pill.className = 'gate-pill' + (s === 'pass' ? ' pass' : s === 'fail' ? ' fail' : s === 'partial' ? ' partial' : '');
+    if (s !== 'unanswered') completed++;
+
+    // gate card border
+    card.className = 'gate-card' + (s === 'pass' ? ' gate-pass' : s === 'fail' ? ' gate-fail' : '');
+
+    // summary item
+    sg.className = 'sg-item' + (s === 'pass' ? ' pass' : s === 'fail' ? ' fail' : '');
+
+    // question counter
+    const answered = gate.questions.filter(q => answers[q.id]).length;
+    cnt.textContent = answered + ' / ' + gate.questions.length;
+  });
+
+  document.getElementById('progressLabel').textContent = `${completed} / 5 gates evaluated`;
+  updateVerdict();
+}
+
+// ─── VERDICT ──────────────────────────────────────────────────────────────────
+function updateVerdict() {
+  const banner  = document.getElementById('verdictBanner');
+  const anyAns  = Object.values(answers).some(v => v);
+  banner.className = 'verdict-banner';
+
+  if (!anyAns) return;
+
+  const criticalFail = GATES.filter(g => g.critical).some(g => gateStatus(g) === 'fail');
+  const allPass      = GATES.every(g => gateStatus(g) === 'pass');
+  const borderline   = !criticalFail && GATES.filter(g => !g.critical).some(g => gateStatus(g) === 'fail');
+
+  if (criticalFail) {
+    banner.classList.add('show', 'nogo-banner');
+    document.getElementById('verdictIcon').textContent  = '🚫';
+    document.getElementById('verdictTitle').textContent = 'DISQUALIFIED — Critical gate failed';
+    document.getElementById('verdictSub').textContent   = 'Stop immediately. Log the reason in the CRM.';
+  } else if (allPass) {
+    banner.classList.add('show', 'go-banner');
+    document.getElementById('verdictIcon').textContent  = '✅';
+    document.getElementById('verdictTitle').textContent = 'ALL GATES PASS — Proceed to Site Assessment';
+    document.getElementById('verdictSub').textContent   = 'All criteria validated. Move to the next step.';
+  } else if (borderline) {
+    banner.classList.add('show', 'warn-banner');
+    document.getElementById('verdictIcon').textContent  = '⚠️';
+    document.getElementById('verdictTitle').textContent = 'BORDERLINE — Escalate to Sales Lead';
+    document.getElementById('verdictSub').textContent   = 'Gate 2 or 4 failed. Do not decide alone — escalate before proceeding.';
+  }
+}
+
+// ─── SAVE ─────────────────────────────────────────────────────────────────────
+async function saveData() {
+  const btn  = document.getElementById('saveBtn');
+  const icon = document.getElementById('saveBtnIcon');
+  const text = document.getElementById('saveBtnText');
+
+  btn.className = 'save-btn saving';
+  icon.textContent = '…';
+  text.textContent = 'Saving';
+
+  const payload = {
+    action: 'save',
+    deal_id: dealId,
+    deal_title: dealTitle,
+    timestamp: new Date().toISOString(),
+    answers,
+    notes,
+    verdict: getVerdict()
+  };
+
+  try {
+    if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes('VOTRE')) {
+      await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    } else {
+      localStorage.setItem('scorecard_' + dealId, JSON.stringify({ answers, notes }));
+      await new Promise(r => setTimeout(r, 500));
+    }
+    document.getElementById('lastSaved').textContent =
+      'Last saved: ' + new Date().toLocaleTimeString('en-GB');
+    btn.className = 'save-btn saved';
+    icon.textContent = '✓';
+    text.textContent = 'Saved';
+    showToast('Saved to Google Sheets', 'success');
+    setTimeout(() => {
+      btn.className = 'save-btn';
+      icon.textContent = '↑';
+      text.textContent = 'Save';
+    }, 2500);
+  } catch (err) {
+    btn.className = 'save-btn';
+    icon.textContent = '↑';
+    text.textContent = 'Save';
+    showToast('Save failed', 'error');
+  }
+}
+
+// ─── LOAD ─────────────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const url = APPS_SCRIPT_URL + '?action=load&deal_id=' + encodeURIComponent(dealId);
+    const res  = await fetch(url);
+    const data = await res.json();
+    if (data && data.answers) {
+      answers = data.answers;
+      notes   = data.notes || {};
+      applyAnswers();
+      if (data.timestamp)
+        document.getElementById('lastSaved').textContent =
+          'Last saved: ' + new Date(data.timestamp).toLocaleString('en-GB');
+    }
+  } catch (e) {
+    console.warn('Could not load data:', e);
+  }
+}
+
+// ─── VERDICT STRING ───────────────────────────────────────────────────────────
+function getVerdict() {
+  if (GATES.filter(g => g.critical).some(g => gateStatus(g) === 'fail')) return 'DISQUALIFIED';
+  if (GATES.every(g => gateStatus(g) === 'pass'))                         return 'GO';
+  if (GATES.filter(g => !g.critical).some(g => gateStatus(g) === 'fail')) return 'BORDERLINE';
+  return 'IN_PROGRESS';
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = type === 'success' ? '✓' : '✕';
+  t.className = 'toast show ' + type;
+  setTimeout(() => { t.className = 'toast'; }, 3000);
+}
+</script>
+</body>
+</html>
