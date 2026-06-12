@@ -50,17 +50,45 @@
     top: 0;
     z-index: 100;
   }
-  .header-left { display: flex; align-items: center; gap: 20px; }
-  .logo img { height: 30px; width: auto; display: block; }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .logo img { height: 28px; width: auto; display: block; }
   .logo-fallback {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: var(--text);
     letter-spacing: -1px;
   }
   .logo-fallback span { color: var(--cyan); }
-  .header-divider { width: 1px; height: 22px; background: var(--border); }
+  .header-divider { width: 1px; height: 20px; background: var(--border); }
   .header-subtitle { font-size: 13px; font-weight: 500; color: var(--muted); }
+  .header-deal {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px 4px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+  .header-deal .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    flex-shrink: 0;
+  }
+  .header-deal-prospect {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .header-right { display: flex; align-items: center; gap: 12px; }
   .confidential-badge {
     font-size: 10px;
@@ -91,67 +119,14 @@
   .save-btn.saving { background: var(--muted); }
   .save-btn.saved  { background: var(--green); }
 
-  /* ── HERO ───────────────────────────────────── */
-  .hero {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    padding: 48px 40px 40px;
-  }
-  .hero-inner { max-width: 820px; margin: 0 auto; }
-  .hero-eyebrow {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--cyan);
-    margin-bottom: 16px;
-  }
-  .hero-title {
-    font-size: 38px;
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -1px;
-    color: var(--text);
-    margin-bottom: 16px;
-  }
-  .hero-title .accent { color: var(--cyan); }
-  .hero-desc {
-    font-size: 15px;
-    color: var(--text-2);
-    font-weight: 400;
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 28px;
-  }
-  .deal-pills { display: flex; gap: 10px; flex-wrap: wrap; }
-  .deal-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-2);
-  }
-  .deal-pill .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--cyan);
-    flex-shrink: 0;
-  }
-
   /* ── PROGRESS STRIP ─────────────────────────── */
   .progress-strip {
     background: var(--white);
     border-bottom: 1px solid var(--border);
-    padding: 14px 40px;
+    padding: 10px 40px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
   }
   .progress-gates { display: flex; gap: 4px; flex: 1; }
   .gate-pill {
@@ -175,7 +150,7 @@
   .main {
     max-width: 900px;
     margin: 0 auto;
-    padding: 40px 24px 100px;
+    padding: 28px 24px 100px;
   }
 
   /* ── VERDICT ────────────────────────────────── */
@@ -462,38 +437,13 @@
   .toast.success { background: #0F1923; }
   .toast.error   { background: var(--orange); }
 
-  /* ── LOADING ────────────────────────────────── */
-  .loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--white);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
-    gap: 16px;
-    transition: opacity 0.3s;
-  }
-  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
-  .spinner {
-    width: 28px;
-    height: 28px;
-    border: 2px solid var(--border);
-    border-top-color: var(--cyan);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.5px; }
 
   /* ── RESPONSIVE ─────────────────────────────── */
   @media (max-width: 640px) {
     .header { padding: 0 16px; }
-    .hero   { padding: 32px 16px 28px; }
-    .hero-title { font-size: 26px; }
-    .progress-strip { padding: 12px 16px; }
-    .main   { padding: 24px 14px 80px; }
+    .header-deal-prospect { display: none; }
+    .progress-strip { padding: 8px 16px; }
+    .main   { padding: 20px 14px 80px; }
     .gate-header { padding: 14px 16px; }
     .question-row { grid-template-columns: 1fr; gap: 14px; padding: 16px; }
     .q-right { align-items: flex-start; }
@@ -505,23 +455,17 @@
 </head>
 <body>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loadingOverlay">
-  <img src="logoaioo.png" alt="AiOO" style="height:34px;width:auto;" onerror="this.style.display='none';document.getElementById('loadingLogo').style.display='block'">
-  <div id="loadingLogo" style="display:none;font-size:24px;font-weight:800;color:#0F1923;letter-spacing:-1px;">Ai<span style="color:#1AC8CE;">OO</span></div>
-  <div class="spinner"></div>
-  <div class="loading-text">Loading scorecard…</div>
-</div>
-
 <!-- HEADER -->
 <div class="header">
   <div class="header-left">
     <div class="logo">
-      <img src="logoaioo.png" alt="AiOO" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
+      <img src="https://aioorep.github.io/assessment/aioo_logo_dark.png" alt="AiOO" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block'">
       <div id="logoFallback" class="logo-fallback" style="display:none;">Ai<span>OO</span></div>
     </div>
     <div class="header-divider"></div>
     <div class="header-subtitle">Discovery Scorecard</div>
+    <div class="header-deal"><span class="dot"></span>Deal #<span id="dealTagNum">—</span></div>
+    <div class="header-deal-prospect" id="dealTitlePill">—</div>
   </div>
   <div class="header-right">
     <div class="confidential-badge">Confidential</div>
@@ -529,19 +473,6 @@
       <span id="saveBtnIcon">↑</span>
       <span id="saveBtnText">Save</span>
     </button>
-  </div>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">SALES · DISCOVERY</div>
-    <h1 class="hero-title">Discovery Qualification <span class="accent">Scorecard</span></h1>
-    <p class="hero-desc">Complete this scorecard during or after a discovery call. Each gate must be evaluated before advancing the deal. Critical gates require a full pass — a single NO-GO stops the deal.</p>
-    <div class="deal-pills">
-      <div class="deal-pill"><span class="dot"></span> Deal #<span id="dealTagNum">—</span></div>
-      <div class="deal-pill" id="dealTitlePill">—</div>
-    </div>
   </div>
 </div>
 
@@ -774,7 +705,6 @@ window.onload = async () => {
     }
   }
 
-  document.getElementById('loadingOverlay').classList.add('hidden');
   updateAll();
 };
 
